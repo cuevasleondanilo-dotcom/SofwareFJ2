@@ -1,6 +1,6 @@
 """
 Sistema Integral de Gestión de Clientes, Servicios y Reservas - Software FJ
-Con Interfaz Gráfica Profesional (Tkinter)
+Con Interfaz Gráfica Profesional (Tkinter - Sin dependencias externas)
 Curso: Programación - Código: 213023
 Universidad Nacional Abierta y a Distancia
 """
@@ -12,7 +12,6 @@ import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from PIL import Image, ImageTk  # Necesitas instalar: pip install Pillow
 
 # ========================= CONFIGURACIÓN DE LOGS =========================
 LOG_FILE = "sistema_logs.log"
@@ -252,7 +251,8 @@ class SistemaGestion:
             AlquilerEquipos("E001", "Laptop HP", 15000, "Portátil"),
             AlquilerEquipos("E002", "Proyector Epson", 25000, "Multimedia"),
             AsesoriasEspecializadas("A001", "Python Avanzado", 80000, "Programación"),
-            AsesoriasEspecializadas("A002", "Bases de Datos", 70000, "SQL")
+            AsesoriasEspecializadas("A002", "Bases de Datos", 70000, "SQL"),
+            AsesoriasEspecializadas("A003", "Desarrollo Web", 90000, "JavaScript")
         ]
         for s in servicios_def:
             self._servicios.append(s)
@@ -333,8 +333,11 @@ class AplicacionSistema:
         header.pack(fill="x")
         header.pack_propagate(False)
         
-        titulo = tk.Label(header, text="🏢 SOFTWARE FJ - SISTEMA INTEGRAL DE GESTIÓN", font=("Segoe UI", 18, "bold"), bg=self.colores["acento"], fg="white")
+        titulo = tk.Label(header, text="SOFTWARE FJ - SISTEMA INTEGRAL DE GESTIÓN", font=("Segoe UI", 18, "bold"), bg=self.colores["acento"], fg="white")
         titulo.pack(pady=15)
+        
+        subtitulo = tk.Label(header, text="Clientes | Servicios | Reservas", font=("Segoe UI", 10), bg=self.colores["acento"], fg="#d0d0d0")
+        subtitulo.pack()
         
         # Panel de pestañas
         self.notebook = ttk.Notebook(self.root)
@@ -348,7 +351,7 @@ class AplicacionSistema:
     
     def _crear_pestana_clientes(self):
         tab = ttk.Frame(self.notebook)
-        self.notebook.add(tab, text="👥 CLIENTES")
+        self.notebook.add(tab, text="CLIENTES")
         
         # Panel izquierdo - Formulario
         panel_form = tk.Frame(tab, bg=self.colores["bg_secundario"], relief="ridge", bd=2)
@@ -372,7 +375,7 @@ class AplicacionSistema:
             entry.pack(side="left", padx=5)
             self.entries_clientes[key] = entry
         
-        btn_guardar = tk.Button(panel_form, text="✅ REGISTRAR CLIENTE", bg=self.colores["exito"], fg="white", font=("Segoe UI", 11, "bold"), command=self._registrar_cliente)
+        btn_guardar = tk.Button(panel_form, text="REGISTRAR CLIENTE", bg=self.colores["exito"], fg="white", font=("Segoe UI", 11, "bold"), command=self._registrar_cliente)
         btn_guardar.pack(pady=15, fill="x")
         
         # Panel derecho - Lista de clientes
@@ -398,9 +401,8 @@ class AplicacionSistema:
     
     def _crear_pestana_servicios(self):
         tab = ttk.Frame(self.notebook)
-        self.notebook.add(tab, text="🛠️ SERVICIOS")
+        self.notebook.add(tab, text="SERVICIOS")
         
-        # Treeview para servicios
         panel = tk.Frame(tab, bg=self.colores["bg_secundario"])
         panel.pack(fill="both", expand=True, padx=10, pady=10)
         
@@ -421,7 +423,7 @@ class AplicacionSistema:
     
     def _crear_pestana_reservas(self):
         tab = ttk.Frame(self.notebook)
-        self.notebook.add(tab, text="📅 RESERVAS")
+        self.notebook.add(tab, text="RESERVAS")
         
         # Panel superior - Crear reserva
         panel_crear = tk.Frame(tab, bg=self.colores["bg_secundario"], relief="ridge", bd=2)
@@ -432,35 +434,35 @@ class AplicacionSistema:
         frame_fila = tk.Frame(panel_crear, bg=self.colores["bg_secundario"])
         frame_fila.pack(pady=5)
         
-        tk.Label(frame_fila, text="Cliente ID:", bg=self.colores["bg_secundario"], fg=self.colores["texto"]).pack(side="left", padx=5)
+        tk.Label(frame_fila, text="Cliente ID:", bg=self.colores["bg_secundario"], fg=self.colores["texto"], font=("Segoe UI", 10)).pack(side="left", padx=5)
         self.combo_clientes = ttk.Combobox(frame_fila, width=20, font=("Segoe UI", 10))
         self.combo_clientes.pack(side="left", padx=5)
         
-        tk.Label(frame_fila, text="Servicio ID:", bg=self.colores["bg_secundario"], fg=self.colores["texto"]).pack(side="left", padx=5)
+        tk.Label(frame_fila, text="Servicio ID:", bg=self.colores["bg_secundario"], fg=self.colores["texto"], font=("Segoe UI", 10)).pack(side="left", padx=5)
         self.combo_servicios = ttk.Combobox(frame_fila, width=20, font=("Segoe UI", 10))
         self.combo_servicios.pack(side="left", padx=5)
         
-        tk.Label(frame_fila, text="Duración (h):", bg=self.colores["bg_secundario"], fg=self.colores["texto"]).pack(side="left", padx=5)
+        tk.Label(frame_fila, text="Duración (horas):", bg=self.colores["bg_secundario"], fg=self.colores["texto"], font=("Segoe UI", 10)).pack(side="left", padx=5)
         self.entry_duracion = tk.Entry(frame_fila, width=10, font=("Segoe UI", 10), bg="#3d3d50", fg="white")
         self.entry_duracion.pack(side="left", padx=5)
         
-        btn_crear = tk.Button(frame_fila, text="📌 CREAR RESERVA", bg=self.colores["exito"], fg="white", font=("Segoe UI", 10, "bold"), command=self._crear_reserva)
+        btn_crear = tk.Button(frame_fila, text="CREAR RESERVA", bg=self.colores["exito"], fg="white", font=("Segoe UI", 10, "bold"), command=self._crear_reserva)
         btn_crear.pack(side="left", padx=20)
         
         # Panel medio - Acciones
         panel_acciones = tk.Frame(tab, bg=self.colores["bg_secundario"])
         panel_acciones.pack(fill="x", padx=10, pady=5)
         
-        btn_confirmar = tk.Button(panel_acciones, text="✅ Confirmar", bg=self.colores["exito"], fg="white", command=self._confirmar_reserva)
+        btn_confirmar = tk.Button(panel_acciones, text="Confirmar", bg=self.colores["exito"], fg="white", font=("Segoe UI", 10), command=self._confirmar_reserva)
         btn_confirmar.pack(side="left", padx=5, pady=5)
         
-        btn_cancelar = tk.Button(panel_acciones, text="❌ Cancelar", bg=self.colores["peligro"], fg="white", command=self._cancelar_reserva)
+        btn_cancelar = tk.Button(panel_acciones, text="Cancelar", bg=self.colores["peligro"], fg="white", font=("Segoe UI", 10), command=self._cancelar_reserva)
         btn_cancelar.pack(side="left", padx=5, pady=5)
         
-        btn_completar = tk.Button(panel_acciones, text="🏁 Completar", bg=self.colores["advertencia"], fg="white", command=self._completar_reserva)
+        btn_completar = tk.Button(panel_acciones, text="Completar", bg=self.colores["advertencia"], fg="white", font=("Segoe UI", 10), command=self._completar_reserva)
         btn_completar.pack(side="left", padx=5, pady=5)
         
-        btn_refrescar = tk.Button(panel_acciones, text="🔄 Refrescar", bg=self.colores["acento"], fg="white", command=self._actualizar_lista_reservas)
+        btn_refrescar = tk.Button(panel_acciones, text="Refrescar", bg=self.colores["acento"], fg="white", font=("Segoe UI", 10), command=self._actualizar_lista_reservas)
         btn_refrescar.pack(side="right", padx=5, pady=5)
         
         # Panel inferior - Lista de reservas
@@ -472,22 +474,37 @@ class AplicacionSistema:
         self.tree_reservas = ttk.Treeview(panel_lista, columns=("ID", "Cliente", "Servicio", "Duración", "Fecha", "Estado", "Costo"), show="headings", height=12)
         for col in self.tree_reservas["columns"]:
             self.tree_reservas.heading(col, text=col)
-            self.tree_reservas.column(col, width=120 if col != "Servicio" else 150)
+            if col == "Servicio":
+                self.tree_reservas.column(col, width=150)
+            else:
+                self.tree_reservas.column(col, width=120)
         self.tree_reservas.pack(fill="both", expand=True)
+        
+        scroll = ttk.Scrollbar(panel_lista, orient="vertical", command=self.tree_reservas.yview)
+        scroll.pack(side="right", fill="y")
+        self.tree_reservas.configure(yscrollcommand=scroll.set)
     
     def _crear_pestana_logs(self):
         tab = ttk.Frame(self.notebook)
-        self.notebook.add(tab, text="📋 LOGS DEL SISTEMA")
+        self.notebook.add(tab, text="LOGS")
         
         panel = tk.Frame(tab, bg=self.colores["bg_secundario"])
         panel.pack(fill="both", expand=True, padx=10, pady=10)
         
         tk.Label(panel, text="REGISTRO DE EVENTOS Y ERRORES", font=("Segoe UI", 12, "bold"), bg=self.colores["bg_secundario"], fg=self.colores["acento"]).pack(pady=5)
         
-        self.text_logs = scrolledtext.ScrolledText(panel, wrap=tk.WORD, width=100, height=25, bg="#1e1e2f", fg="#00ff00", font=("Consolas", 9), insertbackground="white")
-        self.text_logs.pack(fill="both", expand=True)
+        # Frame para texto y scroll
+        frame_text = tk.Frame(panel, bg=self.colores["bg_secundario"])
+        frame_text.pack(fill="both", expand=True)
         
-        btn_refrescar = tk.Button(panel, text="🔄 Refrescar Logs", bg=self.colores["acento"], fg="white", command=self._actualizar_logs)
+        self.text_logs = tk.Text(frame_text, wrap=tk.WORD, width=100, height=25, bg="#1e1e2f", fg="#00ff00", font=("Consolas", 9), insertbackground="white")
+        self.text_logs.pack(side="left", fill="both", expand=True)
+        
+        scroll_logs = tk.Scrollbar(frame_text, orient="vertical", command=self.text_logs.yview)
+        scroll_logs.pack(side="right", fill="y")
+        self.text_logs.configure(yscrollcommand=scroll_logs.set)
+        
+        btn_refrescar = tk.Button(panel, text="REFRESCAR LOGS", bg=self.colores["acento"], fg="white", font=("Segoe UI", 10), command=self._actualizar_logs)
         btn_refrescar.pack(pady=5)
         
         self._actualizar_logs()
@@ -497,6 +514,7 @@ class AplicacionSistema:
             self.sistema.registrar_cliente("C001", "Ana María Rodríguez", "ana@email.com", "3001234567")
             self.sistema.registrar_cliente("C002", "Carlos López", "carlos@email.com", "3119876543")
             self.sistema.registrar_cliente("C003", "María García", "maria@email.com", "3225558877")
+            self.sistema.registrar_cliente("C004", "Juan Pérez", "juan@email.com", "3104445566")
         except:
             pass
         self._actualizar_lista_clientes()
@@ -555,8 +573,13 @@ class AplicacionSistema:
                 messagebox.showwarning("Datos incompletos", "Seleccione cliente y servicio")
                 return
             
+            if duracion <= 0:
+                messagebox.showwarning("Duración inválida", "La duración debe ser mayor a 0")
+                return
+            
             reserva = self.sistema.crear_reserva(id_cliente, id_servicio, duracion)
             self._actualizar_lista_reservas()
+            self.entry_duracion.delete(0, tk.END)
             messagebox.showinfo("Éxito", f"Reserva {reserva._id_reserva} creada exitosamente")
         except Exception as e:
             messagebox.showerror("Error", str(e))
@@ -618,9 +641,13 @@ class AplicacionSistema:
         if os.path.exists(LOG_FILE):
             with open(LOG_FILE, "r", encoding="utf-8") as f:
                 contenido = f.read()
-                self.text_logs.insert(tk.END, contenido)
+                # Mostrar las últimas 100 líneas aproximadamente
+                lineas = contenido.split('\n')
+                if len(lineas) > 100:
+                    lineas = lineas[-100:]
+                self.text_logs.insert(tk.END, '\n'.join(lineas))
         else:
-            self.text_logs.insert(tk.END, "No hay archivo de logs aún")
+            self.text_logs.insert(tk.END, "No hay archivo de logs aún. Los eventos se registrarán al usar el sistema.")
 
 # ========================= PUNTO DE ENTRADA =========================
 if __name__ == "__main__":
